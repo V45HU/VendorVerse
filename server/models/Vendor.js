@@ -48,6 +48,21 @@ const vendorSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    profileImage: {
+      type: String,
+      default: ""
+    },
+
+    portfolioCount: {
+      type: Number,
+      default: 0
+    },
+
+    trustScore: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

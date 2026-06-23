@@ -6,6 +6,8 @@ import {
 
 import {
   createVendorProfile,
+  getMyVendorProfile,
+  updateVendorProfile,
 } from "../controllers/vendorController.js";
 
 const router = express.Router();
@@ -15,6 +17,20 @@ router.post(
   protect,
   authorize("vendor"),
   createVendorProfile
+);
+
+router.get(
+  "/profile",
+  protect,
+  authorize("vendor"),
+  getMyVendorProfile
+);
+
+router.put(
+  "/profile",
+  protect,
+  authorize("vendor"),
+  updateVendorProfile
 );
 
 export default router;
