@@ -1,22 +1,20 @@
 import express from "express";
 import {
   protect,
-  authorize
+  authorize,
 } from "../middleware/authMiddleware.js";
+
+import {
+  createVendorProfile,
+} from "../controllers/vendorController.js";
 
 const router = express.Router();
 
-router.get(
-  "/dashboard",
+router.post(
+  "/profile",
   protect,
   authorize("vendor"),
-  (req, res) => {
-
-    res.json({
-      message: "Vendor Dashboard Access"
-    });
-
-  }
+  createVendorProfile
 );
 
 export default router;
