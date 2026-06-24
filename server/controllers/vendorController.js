@@ -131,3 +131,88 @@ export const updateVendorProfile = async (
 
   }
 };
+
+export const getAllVendors = async (
+  req,
+  res
+) => {
+  try {
+
+    const vendors = await Vendor.find();
+
+    res.status(200).json(vendors);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};
+
+export const searchVendors = async (
+  req,
+  res
+) => {
+  try {
+
+    const { city, category } = req.query;
+
+    let query = {};
+
+    if (city) {
+      query.city = {
+      $regex: city,
+      $options: "i",
+      };
+    }
+
+    if (category) {
+      query.category = {
+      $regex: category,
+      $options: "i",
+      };
+    }
+
+    const vendors =
+      await Vendor.find(query);
+
+    res.status(200).json(vendors);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};
+
+export const getVendorById = async (
+  req,
+  res
+) => {
+  try {
+
+    const vendor =
+      await Vendor.findById(
+        req.params.id
+      );
+
+    if (!vendor) {
+      return res.status(404).json({
+        message: "Vendor Not Found",
+      });
+    }
+
+    res.status(200).json(vendor);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};

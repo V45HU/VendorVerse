@@ -8,6 +8,9 @@ import {
   createVendorProfile,
   getMyVendorProfile,
   updateVendorProfile,
+  getAllVendors,
+  searchVendors,
+  getVendorById,
 } from "../controllers/vendorController.js";
 
 const router = express.Router();
@@ -26,11 +29,27 @@ router.get(
   getMyVendorProfile
 );
 
+
+router.get(
+  "/all",
+  getAllVendors
+);
+
+router.get(
+  "/search",
+  searchVendors
+);
+
 router.put(
   "/profile",
   protect,
   authorize("vendor"),
   updateVendorProfile
+);
+
+router.get(
+  "/:id",
+  getVendorById
 );
 
 export default router;
