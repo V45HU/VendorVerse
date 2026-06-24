@@ -145,3 +145,27 @@ export const deletePortfolioItem = async (
 
   }
 };
+
+export const getVendorPortfolio = async (
+  req,
+  res
+) => {
+  try {
+
+    const portfolioItems =
+      await Portfolio.find({
+        vendorId: req.params.id,
+      });
+
+    res.status(200).json(
+      portfolioItems
+    );
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};

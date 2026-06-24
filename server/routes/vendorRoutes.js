@@ -13,6 +13,10 @@ import {
   getVendorById,
 } from "../controllers/vendorController.js";
 
+import {
+  getVendorPortfolio,
+} from "../controllers/portfolioController.js";
+
 const router = express.Router();
 
 router.post(
@@ -48,8 +52,14 @@ router.put(
 );
 
 router.get(
+  "/:id/portfolio",
+  getVendorPortfolio,
+);
+
+router.get(
   "/:id",
   getVendorById
 );
+
 
 export default router;
