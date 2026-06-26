@@ -1,6 +1,8 @@
 function Home() {
   return (
-    <h1>VendorVerse Home</h1>
+    <main className="min-h-screen bg-slate-950">
+
+    </main>
   );
 }
 
