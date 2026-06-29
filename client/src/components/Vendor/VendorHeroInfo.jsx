@@ -5,7 +5,7 @@ import {
   Star,
 } from "lucide-react";
 
-function VendorHeroInfo() {
+function VendorHeroInfo({vendor}) {
   return (
     <>
       {/* Top Row */}
@@ -21,7 +21,10 @@ function VendorHeroInfo() {
                   <div className="w-28 h-28 rounded-3xl overflow-hidden border-4 border-white shadow-lg bg-black">
 
                     <img
-                      src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=400"
+                      src={
+                        vendor?.profileImage ||
+                        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=400"
+                      }
                       alt="Vendor Logo"
                       className="w-full h-full object-cover"
                     />
@@ -36,7 +39,7 @@ function VendorHeroInfo() {
 
                       <h1 className="text-5xl font-bold text-slate-900">
 
-                        Pixel Photography Studio
+                        {vendor.name}
 
                       </h1>
 
@@ -59,13 +62,13 @@ function VendorHeroInfo() {
 
                       <span className="font-semibold text-lg">
 
-                        4.9
+                        {vendor.rating}
 
                       </span>
 
                       <span className="text-slate-500">
 
-                        (128 Reviews)
+                        {vendor.totalReviews} Reviews
 
                       </span>
 
@@ -75,7 +78,7 @@ function VendorHeroInfo() {
 
                     <div className="flex items-center gap-3 mt-4 text-slate-600">
 
-                      <span>Photographer</span>
+                      <span>{vendor.category}</span>
 
                       <span>•</span>
 
@@ -83,7 +86,7 @@ function VendorHeroInfo() {
 
                         <MapPin size={16} />
 
-                        Raipur
+                        {vendor.city}
 
                       </div>
 
@@ -93,11 +96,11 @@ function VendorHeroInfo() {
 
                     <div className="mt-5">
 
-                      <span className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 rounded-full px-4 py-2 text-sm font-semibold">
-
-                        ✓ Verified Vendor
-
-                      </span>
+                      {vendor.verified && (
+                        <span className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold">
+                          ✓ Verified Vendor
+                        </span>
+                      )}
 
                     </div>
 

@@ -72,7 +72,7 @@ function VendorDetails() {
     
     
     // Loading State; before rendering
-    if(loading){
+    if(loading || !vendor){
     
         return (
     
@@ -98,7 +98,7 @@ function VendorDetails() {
 
         <VendorCover />
 
-        <VendorInfoCard/> 
+        <VendorInfoCard vendor={vendor}/> 
 
       <section className="max-w-7xl mx-auto px-6 py-10">
 
@@ -106,9 +106,9 @@ function VendorDetails() {
 
           <div className="lg:col-span-2">
 
-            <VendorAbout/>
+            <VendorAbout vendor={vendor}/>
 
-            <VendorPortfolio/>
+            <VendorPortfolio portfolio={portfolio}/>
 
             <VendorServices />
 
@@ -116,7 +116,7 @@ function VendorDetails() {
 
           </div>
 
-          <BookingSidebar/>
+          <BookingSidebar vendor={vendor}/>
 
         </div>
 

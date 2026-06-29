@@ -34,7 +34,7 @@ const specialties = [
   },
 ];
 
-function VendorAbout() {
+function VendorAbout({vendor}) {
   return (
     <section className="bg-white rounded-3xl shadow-lg border border-slate-100 p-8">
 
@@ -48,18 +48,8 @@ function VendorAbout() {
 
       {/* Description */}
 
-      <p className="mt-6 text-slate-600 leading-8">
-
-        Pixel Photography Studio is one of Chhattisgarh's trusted
-        wedding photography teams specializing in candid moments,
-        cinematic wedding films, destination weddings, engagement
-        shoots and premium event coverage.
-
-        We believe every celebration deserves timeless memories.
-        Our experienced photographers combine creativity,
-        storytelling and modern editing techniques to deliver
-        photographs that remain beautiful for years.
-
+      <p className="text-slate-600 leading-9">
+        {vendor.description}
       </p>
 
       {/* Divider */}

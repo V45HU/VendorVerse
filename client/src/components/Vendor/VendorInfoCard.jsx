@@ -1,7 +1,7 @@
 import VendorHeroInfo from "./VendorHeroInfo";
 import VendorStats from "./VendorStats";
 
-function VendorInfoCard() {
+function VendorInfoCard({vendor}) {
   return (
     <section className="bg-slate-50">
 
@@ -13,7 +13,7 @@ function VendorInfoCard() {
             {/* main container of floating card & height controlled by */}
           <div className="bg-white rounded-[28px] shadow-2xl p-10">
 
-            <VendorHeroInfo />
+            <VendorHeroInfo vendor={vendor} />
 
             <VendorStats />
 
