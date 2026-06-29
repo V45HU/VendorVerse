@@ -1,62 +1,94 @@
+import mongoose from "mongoose";
 import Vendor from "../models/Vendor.js";
+import generateSlug from "../utils/generateSlug.js";
 
-export const createVendorProfile = async (
-  req,
-  res
-) => {
+export const createVendorProfile = async (req, res) => {
   try {
-
     const {
       businessName,
       category,
       city,
+      address,
       phone,
+      whatsapp,
+      email,
+      website,
       description,
+      profileImage,
+      coverImage,
+      experience,
+      startingPrice,
+      responseTime,
+      languages,
+      services,
+      workingHours,
+      instagram,
+      facebook,
+      youtube,
+      latitude,
+      longitude,
     } = req.body;
 
-    const existingVendor =
-      await Vendor.findOne({
-        userId: req.user._id,
-      });
+    const existingVendor = await Vendor.findOne({
+      userId: req.user._id,
+    });
 
     if (existingVendor) {
       return res.status(400).json({
-        message:
-          "Vendor Profile Already Exists",
+        message: "Vendor Profile Already Exists",
       });
     }
 
-    const vendor =
-      await Vendor.create({
-        userId: req.user._id,
-        businessName,
-        category,
-        city,
-        phone,
-        description,
-      });
+    const vendor = await Vendor.create({
+      userId: req.user._id,
 
-    res.status(201).json({
-      message:
-        "Vendor Profile Created Successfully",
-      vendor,
+      businessName,
+      category,
+      city,
+      address,
+
+      phone,
+      whatsapp,
+      email,
+      website,
+
+      description,
+
+      profileImage,
+      coverImage,
+
+      experience,
+      startingPrice,
+      responseTime,
+
+      languages,
+      services,
+
+      workingHours,
+
+      instagram,
+      facebook,
+      youtube,
+
+      latitude,
+      longitude,
+
+      businessSlug: generateSlug(businessName),
     });
 
+    res.status(201).json({
+      message: "Vendor Profile Created Successfully",
+      vendor,
+    });
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const getMyVendorProfile = async (
-  req,
-  res
-) => {
+export const getMyVendorProfile = async (req, res) => {
   try {
-
     const vendor = await Vendor.findOne({
       userId: req.user._id,
     });
@@ -68,22 +100,15 @@ export const getMyVendorProfile = async (
     }
 
     res.status(200).json(vendor);
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const updateVendorProfile = async (
-  req,
-  res
-) => {
+export const updateVendorProfile = async (req, res) => {
   try {
-
     const vendor = await Vendor.findOne({
       userId: req.user._id,
     });
@@ -94,111 +119,81 @@ export const updateVendorProfile = async (
       });
     }
 
-    vendor.businessName =
-      req.body.businessName ||
-      vendor.businessName;
+    // Copy incoming fields
+    Object.assign(vendor, req.body);
 
-    vendor.category =
-      req.body.category ||
-      vendor.category;
+    // Regenerate slug if business name changed
+    if (req.body.businessName) {
+      vendor.businessSlug = generateSlug(req.body.businessName);
+    }
 
-    vendor.city =
-      req.body.city ||
-      vendor.city;
-
-    vendor.phone =
-      req.body.phone ||
-      vendor.phone;
-
-    vendor.description =
-      req.body.description ||
-      vendor.description;
-
-    const updatedVendor =
-      await vendor.save();
+    const updatedVendor = await vendor.save();
 
     res.status(200).json({
-      message:
-        "Vendor Profile Updated Successfully",
+      message: "Vendor Profile Updated Successfully",
       vendor: updatedVendor,
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const getAllVendors = async (
-  req,
-  res
-) => {
+export const getAllVendors = async (req, res) => {
   try {
-
     const vendors = await Vendor.find();
 
     res.status(200).json(vendors);
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const searchVendors = async (
-  req,
-  res
-) => {
+export const searchVendors = async (req, res) => {
   try {
-
     const { city, category } = req.query;
 
     let query = {};
 
     if (city) {
       query.city = {
-      $regex: city,
-      $options: "i",
+        $regex: city,
+        $options: "i",
       };
     }
 
     if (category) {
       query.category = {
-      $regex: category,
-      $options: "i",
+        $regex: category,
+        $options: "i",
       };
     }
 
-    const vendors =
-      await Vendor.find(query);
+    const vendors = await Vendor.find(query);
 
     res.status(200).json(vendors);
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const getVendorById = async (
-  req,
-  res
-) => {
+export const getVendorById = async (req, res) => {
   try {
+    const { id } = req.params;
 
-    const vendor =
-      await Vendor.findById(
-        req.params.id
-      );
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid Vendor ID",
+      });
+    }
+
+    const vendor = await Vendor.findById(id);
 
     if (!vendor) {
       return res.status(404).json({
@@ -207,12 +202,9 @@ export const getVendorById = async (
     }
 
     res.status(200).json(vendor);
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
