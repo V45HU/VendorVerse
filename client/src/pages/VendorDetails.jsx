@@ -1,57 +1,52 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import API from "../api/axios";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+import VendorBreadcrumb from "../components/Vendor/VendorBreadcrumb";
+import VendorCover from "../components/Vendor/VendorCover";
+import VendorInfoCard from "../components/Vendor/VendorInfoCard";
+import VendorAbout from "../components/Vendor/VendorAbout";
+import VendorPortfolio from "../components/Vendor/VendorPortfolio";
+import VendorServices from "../components/Vendor/VendorServices";
+import BookingSidebar from "../components/Vendor/BookingSidebar";
+
+import Reviews from "../components/Vendor/Reviews";
 
 function VendorDetails() {
-
-  const { id } = useParams();
-
-  const [vendor, setVendor] = useState(null);
-
-  useEffect(() => {
-
-    const fetchVendor = async () => {
-
-      try {
-
-        const res = await API.get(`/vendors/${id}`);
-
-        setVendor(res.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-
-    };
-
-    fetchVendor();
-
-  }, [id]);
-
-  if (!vendor) {
-    return <h2>Loading...</h2>;
-  }
-
   return (
-    <div>
+    <>
+      <Navbar />
 
-      <h1>{vendor.businessName}</h1>
+        <VendorBreadcrumb />
 
-      <p><strong>Category:</strong> {vendor.category}</p>
+        <VendorCover />
 
-      <p><strong>City:</strong> {vendor.city}</p>
+        <VendorInfoCard />
 
-      <p><strong>Description:</strong> {vendor.description}</p>
+      <section className="max-w-7xl mx-auto px-6 py-10">
 
-      <p><strong>Rating:</strong> {vendor.rating}</p>
+        <div className="grid lg:grid-cols-3 gap-10">
 
-      <p><strong>Portfolio Items:</strong> {vendor.portfolioCount}</p>
+          <div className="lg:col-span-2">
 
-    </div>
+            <VendorAbout />
+
+            <VendorPortfolio />
+
+            <VendorServices />
+
+            <Reviews />
+
+          </div>
+
+          <BookingSidebar />
+
+        </div>
+
+      </section>
+
+      <Footer />
+    </>
   );
-
 }
 
 export default VendorDetails;

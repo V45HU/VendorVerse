@@ -1,46 +1,19 @@
-import { useEffect, useState } from "react";
-import API from "../api/axios";
-import VendorCard from "../components/VendorCard";
+import Navbar from "../components/Navbar";
+import VendorSearch from "../components/VendorSearch";
+import VendorGrid from "../components/VendorGrid";
+import Footer from "../components/Footer";
 
 function Vendors() {
-
-  const [vendors, setVendors] = useState([]);
-
-  useEffect(() => {
-
-    const fetchVendors = async () => {
-
-      try {
-
-        const res =
-          await API.get("/vendors/all");
-
-        setVendors(res.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
-
-    fetchVendors();
-
-  }, []);
-
   return (
-    <div>
+    <>
+      <Navbar />
 
-      <h1>All Vendors</h1>
+      <VendorSearch />
 
-      {vendors.map((vendor) => (
-        <VendorCard
-          key={vendor._id}
-          vendor={vendor}
-        />
-      ))}
+      <VendorGrid />
 
-    </div>
+      <Footer />
+    </>
   );
 }
 
