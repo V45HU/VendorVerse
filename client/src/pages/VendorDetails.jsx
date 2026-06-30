@@ -6,11 +6,6 @@ import {
   getVendorPortfolio,
 } from "../services/vendorServices.js";
 
-
-
-
-
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -26,100 +21,71 @@ import Reviews from "../components/Vendor/Reviews";
 
 function VendorDetails() {
   const { id } = useParams();
-  
+
   const [vendor, setVendor] = useState(null);
-  
+
   const [portfolio, setPortfolio] = useState([]);
-  
+
   const [loading, setLoading] = useState(true);
 
   // useEffect
   useEffect(() => {
-  
     const loadVendor = async () => {
-  
-          try {
-  
-            const vendorData =
-                  await getVendorById(id);
-                  
-              const portfolioData =
-              await getVendorPortfolio(id);
-              
-              setVendor(vendorData);
-  
-              setPortfolio(portfolioData);
-              
-            }
-            
-            catch(err){
-  
-              console.log(err);
-  
-          }
-  
-          finally{
-  
-              setLoading(false);
-  
-          }
-  
-      };
-  
-      loadVendor();
-      
-    },[id]);
-    
-    
-    // Loading State; before rendering
-    if(loading || !vendor){
-    
-        return (
-    
-            <div className="min-h-screen flex items-center justify-center">
-    
-                Loading Vendor...
-    
-            </div>
-    
+      try {
+        const vendorData = await getVendorById(id);
+
+        const portfolioData = await getVendorPortfolio(id);
+
+        setVendor(vendorData);
+
+        setPortfolio(portfolioData);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadVendor();
+  }, [id]);
+
+  // Loading State; before rendering
+  if (loading || !vendor) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading Vendor...
+      </div>
     );
-    
-    }
+  }
 
-    console.log("Vendor:", vendor);
+  console.log("Vendor:", vendor);
 
-    console.log("Portfolio:", portfolio);
+  console.log("Portfolio:", portfolio);
 
   return (
     <>
       <Navbar />
 
-        <VendorBreadcrumb />
+      <VendorBreadcrumb />
 
-        <VendorCover />
+      <VendorCover />
 
-        <VendorInfoCard vendor={vendor}/> 
+      <VendorInfoCard vendor={vendor} />
 
       <section className="max-w-7xl mx-auto px-6 py-10">
-
         <div className="grid lg:grid-cols-3 gap-10">
-
           <div className="lg:col-span-2">
+            <VendorAbout vendor={vendor} />
 
-            <VendorAbout vendor={vendor}/>
-
-            <VendorPortfolio portfolio={portfolio}/>
+            <VendorPortfolio portfolio={portfolio} />
 
             <VendorServices />
 
             <Reviews />
-
           </div>
 
-          <BookingSidebar vendor={vendor}/>
-
+          <BookingSidebar vendor={vendor} />
         </div>
-
       </section>
 
       <Footer />

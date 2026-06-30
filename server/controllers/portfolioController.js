@@ -1,17 +1,9 @@
 import Portfolio from "../models/Portfolio.js";
 import Vendor from "../models/Vendor.js";
 
-export const createPortfolioItem = async (
-  req,
-  res
-) => {
+export const createPortfolioItem = async (req, res) => {
   try {
-
-    const {
-      title,
-      imageUrl,
-      description,
-    } = req.body;
+    const { title, imageUrl, description } = req.body;
 
     const vendor = await Vendor.findOne({
       userId: req.user._id,
@@ -23,39 +15,30 @@ export const createPortfolioItem = async (
       });
     }
 
-    const portfolio =
-      await Portfolio.create({
-        vendorId: vendor._id,
-        title,
-        imageUrl,
-        description,
-      });
+    const portfolio = await Portfolio.create({
+      vendorId: vendor._id,
+      title,
+      imageUrl,
+      description,
+    });
 
     vendor.portfolioCount += 1;
 
     await vendor.save();
 
     res.status(201).json({
-      message:
-        "Portfolio Item Created Successfully",
+      message: "Portfolio Item Created Successfully",
       portfolio,
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const getMyPortfolio = async (
-  req,
-  res
-) => {
+export const getMyPortfolio = async (req, res) => {
   try {
-
     const vendor = await Vendor.findOne({
       userId: req.user._id,
     });
@@ -66,30 +49,20 @@ export const getMyPortfolio = async (
       });
     }
 
-    const portfolioItems =
-      await Portfolio.find({
-        vendorId: vendor._id,
-      });
+    const portfolioItems = await Portfolio.find({
+      vendorId: vendor._id,
+    });
 
-    res.status(200).json(
-      portfolioItems
-    );
-
+    res.status(200).json(portfolioItems);
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const deletePortfolioItem = async (
-  req,
-  res
-) => {
+export const deletePortfolioItem = async (req, res) => {
   try {
-
     const vendor = await Vendor.findOne({
       userId: req.user._id,
     });
@@ -100,10 +73,7 @@ export const deletePortfolioItem = async (
       });
     }
 
-    const portfolio =
-      await Portfolio.findById(
-        req.params.id
-      );
+    const portfolio = await Portfolio.findById(req.params.id);
 
     if (!portfolio) {
       return res.status(404).json({
@@ -111,18 +81,13 @@ export const deletePortfolioItem = async (
       });
     }
 
-    if (
-      portfolio.vendorId.toString() !==
-      vendor._id.toString()
-    ) {
+    if (portfolio.vendorId.toString() !== vendor._id.toString()) {
       return res.status(403).json({
         message: "Access Denied",
       });
     }
 
-    await Portfolio.findByIdAndDelete(
-      req.params.id
-    );
+    await Portfolio.findByIdAndDelete(req.params.id);
 
     vendor.portfolioCount -= 1;
 
@@ -133,39 +98,32 @@ export const deletePortfolioItem = async (
     await vendor.save();
 
     res.status(200).json({
-      message:
-        "Portfolio Deleted Successfully",
+      message: "Portfolio Deleted Successfully",
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
-export const getVendorPortfolio = async (
-  req,
-  res
-) => {
+export const getVendorPortfolio = async (req, res) => {
   try {
+    const portfolioItems = await Portfolio.find({
+      vendorId: req.params.id,
+    })
+      .select("title imageUrl description createdAt")
+      .sort({ createdAt: -1 });
 
-    const portfolioItems =
-      await Portfolio.find({
-        vendorId: req.params.id,
-      });
+    // This gives us:
+    // newest uploads first,
+    // smaller payloads,
+    // a stable response shape.
 
-    res.status(200).json(
-      portfolioItems
-    );
-
+    res.status(200).json(portfolioItems);
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
