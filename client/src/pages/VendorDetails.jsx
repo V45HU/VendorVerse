@@ -79,7 +79,7 @@ function VendorDetails() {
 
             <VendorPortfolio portfolio={portfolio} />
 
-            <VendorServices />
+            <VendorServices vendor={vendor} />
 
             <Reviews />
           </div>
