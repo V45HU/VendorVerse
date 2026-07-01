@@ -1,6 +1,11 @@
 import { Camera, Images } from "lucide-react";
+import { useState } from "react";
+import PortfolioLightbox from "./PortfolioLightbox";
+import PortfolioImage from "./PortfolioImage";
 
 function VendorPortfolio({ portfolio }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const hasPortfolio = portfolio.length > 0;
 
   return (
@@ -98,78 +103,26 @@ function VendorPortfolio({ portfolio }) {
           gap-5
         "
         >
-          {portfolio.map((item) => (
-            <div
+          {portfolio.map((item, index) => (
+            <PortfolioImage
               key={item.id}
-              className="
-              relative
-              overflow-hidden
-              rounded-3xl
-              group
-              cursor-pointer
-            "
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="
-                h-72
-                w-full
-                object-cover
-                transition
-                duration-500
-                group-hover:scale-110
-              "
-              />
-
-              {/* Overlay */}
-
-              <div
-                className="
-                absolute
-                inset-0
-                bg-gradient-to-t
-                from-black/80
-                via-black/20
-                to-transparent
-                opacity-0
-                group-hover:opacity-100
-                transition
-              "
-              >
-                <div
-                  className="
-                  absolute
-                  bottom-5
-                  left-5
-                  right-5
-                "
-                >
-                  <h3
-                    className="
-                    text-white
-                    font-bold
-                    text-lg
-                  "
-                  >
-                    {item.title}
-                  </h3>
-
-                  <p
-                    className="
-                    text-white/80
-                    text-sm
-                    mt-1
-                  "
-                  >
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            </div>
+              item={item}
+              index={index}
+              onClick={setSelectedImage}
+            />
           ))}
+
+          <p className="mt-4 text-sm text-slate-500">
+            Selected Image :{selectedImage === null ? "None" : selectedImage}
+          </p>
         </div>
       )}
+
+      <PortfolioLightbox
+        portfolio={portfolio}
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
     </section>
   );
 }
