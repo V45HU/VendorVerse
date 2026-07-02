@@ -7,7 +7,7 @@ import {
   Clock,
 } from "lucide-react";
 
-function BookingSidebar({ vendor }) {
+function BookingSidebar({ vendor, onBook }) {
   return (
     <aside className="sticky top-28">
       <div className="bg-white rounded-3xl shadow-lg border border-slate-100 p-7">
@@ -31,7 +31,10 @@ function BookingSidebar({ vendor }) {
 
         {/* Booking Button */}
 
-        <button className="mt-7 w-full bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-xl py-4 font-semibold flex items-center justify-center gap-2">
+        <button
+          onClick={onBook}
+          className="mt-7 w-full bg-emerald-600 hover:bg-emerald-700 transition text-white rounded-xl py-4 font-semibold flex items-center justify-center gap-2"
+        >
           <CalendarCheck size={20} />
           Send Booking Request
         </button>

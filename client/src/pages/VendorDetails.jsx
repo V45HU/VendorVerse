@@ -16,6 +16,7 @@ import VendorAbout from "../components/Vendor/VendorAbout";
 import VendorPortfolio from "../components/Vendor/VendorPortfolio";
 import VendorServices from "../components/Vendor/VendorServices";
 import BookingSidebar from "../components/Vendor/BookingSidebar";
+import BookingModal from "../components/Booking/BookingModal";
 
 import Reviews from "../components/Vendor/Reviews.jsx";
 import { getVendorReviews, createReview } from "../services/reviewServices.js";
@@ -30,6 +31,8 @@ function VendorDetails() {
   const [reviews, setReviews] = useState([]);
 
   const [loading, setLoading] = useState(true);
+
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   const loadReviews = async () => {
     try {
@@ -123,9 +126,15 @@ function VendorDetails() {
             <Reviews reviews={reviews} onCreateReview={handleCreateReview} />
           </div>
 
-          <BookingSidebar vendor={vendor} />
+          <BookingSidebar vendor={vendor} onBook={() => setBookingOpen(true)} />
         </div>
       </section>
+
+      <BookingModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+        vendor={vendor}
+      />
 
       <Footer />
     </>
