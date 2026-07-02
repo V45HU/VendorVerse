@@ -17,7 +17,8 @@ import VendorPortfolio from "../components/Vendor/VendorPortfolio";
 import VendorServices from "../components/Vendor/VendorServices";
 import BookingSidebar from "../components/Vendor/BookingSidebar";
 
-import Reviews from "../components/Vendor/Reviews";
+import Reviews from "../components/Vendor/Reviews.jsx";
+import { getVendorReviews, createReview } from "../services/reviewServices.js";
 
 function VendorDetails() {
   const { id } = useParams();
@@ -26,7 +27,41 @@ function VendorDetails() {
 
   const [portfolio, setPortfolio] = useState([]);
 
+  const [reviews, setReviews] = useState([]);
+
   const [loading, setLoading] = useState(true);
+
+  const loadReviews = async () => {
+    try {
+      const reviewData = await getVendorReviews(id);
+      setReviews(reviewData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCreateReview = async (reviewData) => {
+    try {
+      await createReview({
+        vendorId: id,
+        ...reviewData,
+      });
+
+      alert("Review submitted successfully.");
+
+      // Refresh reviews
+      await loadReviews();
+
+      // Refresh vendor
+      const updatedVendor = await getVendorById(id);
+
+      setVendor(updatedVendor);
+    } catch (error) {
+      console.error(error);
+
+      alert(error.response?.data?.message || "Failed to submit review.");
+    }
+  };
 
   // useEffect
   useEffect(() => {
@@ -39,6 +74,8 @@ function VendorDetails() {
         setVendor(vendorData);
 
         setPortfolio(portfolioData);
+
+        await loadReviews();
       } catch (err) {
         console.log(err);
       } finally {
@@ -62,6 +99,8 @@ function VendorDetails() {
 
   console.log("Portfolio:", portfolio);
 
+  console.log("Reviews:", reviews);
+
   return (
     <>
       <Navbar />
@@ -81,7 +120,7 @@ function VendorDetails() {
 
             <VendorServices vendor={vendor} />
 
-            <Reviews />
+            <Reviews reviews={reviews} onCreateReview={handleCreateReview} />
           </div>
 
           <BookingSidebar vendor={vendor} />
