@@ -27,10 +27,7 @@ export const registerUser = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
 
-    const hashedPassword = await bcrypt.hash(
-      password,
-      salt
-    );
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create user
 
@@ -42,6 +39,7 @@ export const registerUser = async (req, res) => {
     });
 
     res.status(201).json({
+      success: true,
       message: "User Registered Successfully",
       user: {
         id: user._id,
@@ -50,7 +48,6 @@ export const registerUser = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -62,7 +59,6 @@ import generateToken from "../utils/generateTokens.js";
 
 export const loginUser = async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -73,10 +69,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(400).json({
@@ -85,6 +78,7 @@ export const loginUser = async (req, res) => {
     }
 
     res.status(200).json({
+      success: true,
       message: "Login Successful",
       token: generateToken(user._id),
       user: {
@@ -94,12 +88,24 @@ export const loginUser = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
+  }
+};
 
+export const getCurrentUser = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "User Fetched Successfully",
+      user: req.user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
