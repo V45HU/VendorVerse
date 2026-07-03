@@ -9,6 +9,7 @@ import vendorRoutes from "./routes/vendorRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/vendors", vendorRoutes);
 app.use("/api/vendors/portfolio", portfolioRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
   res.send("VendorVerse API Running");
