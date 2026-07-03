@@ -2,15 +2,13 @@ import { Navigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
+import LoadingState from "../components/Dashboard/LoadingState";
+
 function ProtectedRoute({ children, roles = [] }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-lg">
-        Loading...
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (!user) {

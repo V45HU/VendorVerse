@@ -37,12 +37,17 @@ function LoginForm() {
         login(user, token);
       }
 
-      if (response.user.role === "vendor") {
-        navigate("/vendor-dashboard");
-      } else if (response.user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/");
+      switch (user.role) {
+        case "vendor":
+          navigate("/vendor-dashboard");
+          break;
+
+        case "admin":
+          navigate("/admin-dashboard");
+          break;
+
+        default:
+          navigate("/customer-dashboard");
       }
     } catch (error) {
       alert(error.response?.data?.message || "Login Failed");
