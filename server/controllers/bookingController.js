@@ -82,21 +82,32 @@ export const getVendorBookings = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
+        success: false,
         message: "Vendor profile not found",
       });
     }
 
-    const bookings = await Booking.find({
+    const query = {
       vendorId: vendor._id,
-    })
-      .populate("customerId", "name email profileImage")
+    };
+
+    if (req.query.status) {
+      query.status = req.query.status;
+    }
+
+    const bookings = await Booking.find(query)
+      .populate("customerId", "name email")
       .sort({
         createdAt: -1,
       });
 
-    res.status(200).json(bookings);
+    res.status(200).json({
+      success: true,
+      bookings,
+    });
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -134,53 +145,33 @@ export const updateBookingStatus = async (req, res) => {
       userId: req.user._id,
     });
 
-    if (!vendor) {
-      return res.status(404).json({
-        message: "Vendor not found",
-      });
-    }
-
     const booking = await Booking.findById(req.params.id);
 
     if (!booking) {
       return res.status(404).json({
+        success: false,
         message: "Booking not found",
       });
     }
 
     if (booking.vendorId.toString() !== vendor._id.toString()) {
       return res.status(403).json({
+        success: false,
         message: "Access denied",
       });
     }
 
-    booking.status = req.body.status || booking.status;
-
-    booking.vendorNotes = req.body.vendorNotes || booking.vendorNotes;
-
-    booking.quotation = req.body.quotation || booking.quotation;
-
-    booking.meetingDate = req.body.meetingDate || booking.meetingDate;
+    booking.status = req.body.status;
 
     await booking.save();
 
-    //
-    // Update Vendor Stats
-    //
-    if (booking.status === "Completed") {
-      vendor.completedBookings += 1;
-
-      vendor.trustScore += 10;
-
-      await vendor.save();
-    }
-
     res.status(200).json({
-      message: "Booking updated successfully",
+      success: true,
       booking,
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -212,6 +203,84 @@ export const deleteBooking = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const sendQuotation = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({
+      userId: req.user._id,
+    });
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+
+    if (booking.vendorId.toString() !== vendor._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    booking.quotation = req.body.quotation;
+
+    booking.vendorNotes = req.body.vendorNotes;
+
+    await booking.save();
+
+    res.status(200).json({
+      success: true,
+      booking,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const scheduleMeeting = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({
+      userId: req.user._id,
+    });
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+
+    if (booking.vendorId.toString() !== vendor._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
+
+    booking.meetingDate = req.body.meetingDate;
+
+    await booking.save();
+
+    res.status(200).json({
+      success: true,
+      booking,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
       message: error.message,
     });
   }

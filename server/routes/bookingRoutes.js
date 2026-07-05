@@ -9,6 +9,8 @@ import {
   getBookingById,
   updateBookingStatus,
   deleteBooking,
+  sendQuotation,
+  scheduleMeeting,
 } from "../controllers/bookingController.js";
 
 const router = express.Router();
@@ -29,7 +31,11 @@ router.delete("/:id", protect, authorize("customer"), deleteBooking);
 
 router.get("/vendor", protect, authorize("vendor"), getVendorBookings);
 
-router.patch("/:id/status", protect, authorize("vendor"), updateBookingStatus);
+router.put("/:id/status", protect, authorize("vendor"), updateBookingStatus);
+
+router.put("/:id/quotation", protect, authorize("vendor"), sendQuotation);
+
+router.put("/:id/meeting", protect, authorize("vendor"), scheduleMeeting);
 
 //
 // Shared

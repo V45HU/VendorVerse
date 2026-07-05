@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { X, Calendar, MapPin, Users, Wallet, FileText } from "lucide-react";
 
-import { createBooking } from "../../services/bookingService";
+import { createBooking } from "../../../services/bookingService";
 
 function BookingModal({ open, onClose, vendor }) {
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ function BookingModal({ open, onClose, vendor }) {
       setLoading(true);
 
       await createBooking({
-        vendorId: vendor._id,
+        vendorId: vendor?.id || vendor?._id,
         ...formData,
       });
 

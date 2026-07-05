@@ -16,7 +16,7 @@ import VendorAbout from "../components/Vendor/VendorAbout";
 import VendorPortfolio from "../components/Vendor/VendorPortfolio";
 import VendorServices from "../components/Vendor/VendorServices";
 import BookingSidebar from "../components/Vendor/BookingSidebar";
-import BookingModal from "../components/Booking/BookingModal";
+import BookingModal from "../components/Dashboard/Bookings/BookingModal.jsx";
 
 import Reviews from "../components/Vendor/Reviews.jsx";
 import { getVendorReviews, createReview } from "../services/reviewServices.js";

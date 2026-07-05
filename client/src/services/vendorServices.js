@@ -9,6 +9,7 @@ import API from "../api/axios";
 
 const mapVendor = (vendor) => ({
   // Basic Info
+  _id: vendor._id,
   id: vendor._id,
   name: vendor.businessName,
   slug: vendor.businessSlug,

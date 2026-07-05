@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/dashboard/AdminDashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+import VendorBookings from "./pages/dashboard/VendorBookings";
+
 function App() {
   return (
     <Routes>
@@ -27,6 +29,16 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
+
+    
+      <Route
+        path="/vendor-dashboard/bookings"
+        element={
+          <ProtectedRoute roles={["vendor"]}>
+            <VendorBookings />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Customer */}
 
