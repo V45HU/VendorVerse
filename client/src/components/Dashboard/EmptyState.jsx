@@ -1,6 +1,6 @@
 import { Inbox } from "lucide-react";
 
-function EmptyState({ title, description }) {
+function EmptyState({ title, description, icon: Icon = Inbox, action }) {
   return (
     <div
       className="
@@ -26,7 +26,7 @@ function EmptyState({ title, description }) {
           justify-center
         "
       >
-        <Inbox size={38} className="text-slate-500" />
+        <Icon size={38} className="text-slate-500" />
       </div>
 
       <h2
@@ -49,6 +49,8 @@ function EmptyState({ title, description }) {
       >
         {description}
       </p>
+
+      {action && <div className="mt-8">{action}</div>}
     </div>
   );
 }

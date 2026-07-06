@@ -4,11 +4,9 @@ import { Link } from "react-router-dom";
 function VendorCard({ vendor }) {
   return (
     <div className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-slate-100">
-
       {/* Image */}
 
       <div className="relative">
-
         <img
           src={
             vendor.profileImage ||
@@ -21,20 +19,15 @@ function VendorCard({ vendor }) {
         {/* Category */}
 
         <span className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-semibold shadow">
-
           {vendor.category}
-
         </span>
 
         {/* Verified */}
 
         {vendor.isApproved && (
           <span className="absolute top-4 right-4 bg-emerald-500 text-white px-3 py-1 rounded-full flex items-center gap-1 text-xs">
-
             <CheckCircle size={14} />
-
             Verified
-
           </span>
         )}
       </div>
@@ -42,49 +35,31 @@ function VendorCard({ vendor }) {
       {/* Content */}
 
       <div className="p-6">
-
         <div className="flex justify-between items-start">
-
           <div>
-
             <h3 className="text-xl font-bold text-slate-800">
-
               {vendor.businessName}
-
             </h3>
 
             <div className="flex items-center gap-2 mt-2 text-slate-500">
-
               <MapPin size={16} />
 
               {vendor.city}
-
             </div>
-
           </div>
 
           <div className="flex items-center gap-1 text-yellow-500 font-semibold">
-
             <Star fill="currentColor" size={18} />
 
             {Number(vendor.rating).toFixed(1)}
-
           </div>
-
         </div>
 
-        <p className="mt-5 text-slate-500 line-clamp-2">
-
-          {vendor.description}
-
-        </p>
+        <p className="mt-5 text-slate-500 line-clamp-2">{vendor.description}</p>
 
         <div className="flex justify-between items-center mt-6">
-
           <span className="text-sm text-slate-500">
-
             {vendor.portfolioCount} Portfolio Items
-
           </span>
 
           <Link
@@ -93,11 +68,8 @@ function VendorCard({ vendor }) {
           >
             View Profile
           </Link>
-
         </div>
-
       </div>
-
     </div>
   );
 }

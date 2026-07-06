@@ -79,6 +79,30 @@ export const getVendorById = async (id) => {
 
 /*
 |--------------------------------------------------------------------------
+| Vendor Profile Management
+|--------------------------------------------------------------------------
+*/
+
+export const getMyVendorProfile = async () => {
+  const response = await API.get("/vendors/profile");
+
+  return response.data;
+};
+
+export const createVendorProfile = async (payload) => {
+  const response = await API.post("/vendors/profile", payload);
+
+  return response.data;
+};
+
+export const updateVendorProfile = async (payload) => {
+  const response = await API.put("/vendors/profile", payload);
+
+  return response.data;
+};
+
+/*
+|--------------------------------------------------------------------------
 | Get Portfolio
 |--------------------------------------------------------------------------
 */

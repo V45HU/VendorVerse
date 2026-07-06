@@ -12,7 +12,7 @@ export const getVendorDashboard = async (req, res) => {
     if (!vendor) {
       return res.status(404).json({
         success: false,
-        message: "Vendor profile not found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 

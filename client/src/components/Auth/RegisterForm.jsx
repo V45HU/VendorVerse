@@ -48,7 +48,7 @@ function RegisterForm() {
 
       switch (user.role) {
         case "vendor":
-          navigate("/vendor-dashboard");
+          navigate("/vendor-dashboard/profile");
           break;
 
         case "admin":

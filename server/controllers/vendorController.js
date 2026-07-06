@@ -2,78 +2,76 @@ import mongoose from "mongoose";
 import Vendor from "../models/Vendor.js";
 import generateSlug from "../utils/generateSlug.js";
 
+const editableVendorFields = [
+  "businessName",
+  "category",
+  "city",
+  "address",
+  "phone",
+  "whatsapp",
+  "email",
+  "website",
+  "description",
+  "profileImage",
+  "coverImage",
+  "experience",
+  "startingPrice",
+  "responseTime",
+  "languages",
+  "services",
+  "workingHours",
+  "instagram",
+  "facebook",
+  "youtube",
+  "latitude",
+  "longitude",
+];
+
+const getVendorPayload = (body) => {
+  return editableVendorFields.reduce((payload, field) => {
+    if (Object.prototype.hasOwnProperty.call(body, field)) {
+      payload[field] = body[field];
+    }
+
+    return payload;
+  }, {});
+};
+
+const requiredVendorFields = [
+  "businessName",
+  "category",
+  "city",
+  "description",
+  "phone",
+];
+
 export const createVendorProfile = async (req, res) => {
   try {
-    const {
-      businessName,
-      category,
-      city,
-      address,
-      phone,
-      whatsapp,
-      email,
-      website,
-      description,
-      profileImage,
-      coverImage,
-      experience,
-      startingPrice,
-      responseTime,
-      languages,
-      services,
-      workingHours,
-      instagram,
-      facebook,
-      youtube,
-      latitude,
-      longitude,
-    } = req.body;
-
     const existingVendor = await Vendor.findOne({
       userId: req.user._id,
     });
 
     if (existingVendor) {
       return res.status(400).json({
-        message: "Vendor Profile Already Exists",
+        message: "This vendor already has a registered business account.",
+      });
+    }
+
+    const payload = getVendorPayload(req.body);
+    const missingFields = requiredVendorFields.filter(
+      (field) => !String(payload[field] ?? "").trim(),
+    );
+
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        message: `Please provide: ${missingFields.join(", ")}.`,
       });
     }
 
     const vendor = await Vendor.create({
+      ...payload,
       userId: req.user._id,
-
-      businessName,
-      category,
-      city,
-      address,
-
-      phone,
-      whatsapp,
-      email,
-      website,
-
-      description,
-
-      profileImage,
-      coverImage,
-
-      experience,
-      startingPrice,
-      responseTime,
-
-      languages,
-      services,
-
-      workingHours,
-
-      instagram,
-      facebook,
-      youtube,
-
-      latitude,
-      longitude,
-
-      businessSlug: generateSlug(businessName),
+      businessSlug: generateSlug(payload.businessName),
     });
 
     res.status(201).json({
@@ -81,6 +79,12 @@ export const createVendorProfile = async (req, res) => {
       vendor,
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "A business with this name is already registered.",
+      });
+    }
+
     res.status(500).json({
       message: error.message,
     });
@@ -95,7 +99,7 @@ export const getMyVendorProfile = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Vendor Profile Not Found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 
@@ -115,16 +119,17 @@ export const updateVendorProfile = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Vendor Profile Not Found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 
-    // Copy incoming fields
-    Object.assign(vendor, req.body);
+    const payload = getVendorPayload(req.body);
+
+    Object.assign(vendor, payload);
 
     // Regenerate slug if business name changed
-    if (req.body.businessName) {
-      vendor.businessSlug = generateSlug(req.body.businessName);
+    if (payload.businessName) {
+      vendor.businessSlug = generateSlug(payload.businessName);
     }
 
     const updatedVendor = await vendor.save();

@@ -11,7 +11,7 @@ export const createPortfolioItem = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Vendor Profile Not Found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 
@@ -45,15 +45,60 @@ export const getMyPortfolio = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Vendor Profile Not Found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 
     const portfolioItems = await Portfolio.find({
       vendorId: vendor._id,
-    });
+    }).sort({ createdAt: -1 });
 
     res.status(200).json(portfolioItems);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const updatePortfolioItem = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({
+      userId: req.user._id,
+    });
+
+    if (!vendor) {
+      return res.status(404).json({
+        message: "This vendor has not registered a business account yet.",
+      });
+    }
+
+    const portfolio = await Portfolio.findById(req.params.id);
+
+    if (!portfolio) {
+      return res.status(404).json({
+        message: "Portfolio Not Found",
+      });
+    }
+
+    if (portfolio.vendorId.toString() !== vendor._id.toString()) {
+      return res.status(403).json({
+        message: "Access Denied",
+      });
+    }
+
+    const { title, imageUrl, description } = req.body;
+
+    portfolio.title = title ?? portfolio.title;
+    portfolio.imageUrl = imageUrl ?? portfolio.imageUrl;
+    portfolio.description = description ?? portfolio.description;
+
+    const updatedPortfolio = await portfolio.save();
+
+    res.status(200).json({
+      message: "Portfolio Item Updated Successfully",
+      portfolio: updatedPortfolio,
+    });
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -69,7 +114,7 @@ export const deletePortfolioItem = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Vendor Profile Not Found",
+        message: "This vendor has not registered a business account yet.",
       });
     }
 

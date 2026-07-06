@@ -10,6 +10,8 @@ import Register from "./pages/Register";
 import CustomerDashboard from "./pages/dashboard/CustomerDashboard";
 import VendorDashboard from "./pages/dashboard/VendorDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import VendorBusinessProfile from "./pages/dashboard/VendorBusinessProfile";
+import VendorPortfolioManager from "./pages/dashboard/VendorPortfolioManager";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -30,7 +32,6 @@ function App() {
 
       <Route path="/register" element={<Register />} />
 
-    
       <Route
         path="/vendor-dashboard/bookings"
         element={
@@ -52,6 +53,24 @@ function App() {
       />
 
       {/* Vendor */}
+
+      <Route
+        path="/vendor-dashboard/profile"
+        element={
+          <ProtectedRoute roles={["vendor"]}>
+            <VendorBusinessProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/vendor-dashboard/portfolio"
+        element={
+          <ProtectedRoute roles={["vendor"]}>
+            <VendorPortfolioManager />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/vendor-dashboard"

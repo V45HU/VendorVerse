@@ -8,6 +8,7 @@ import {
 import {
   createPortfolioItem,
   getMyPortfolio,
+  updatePortfolioItem,
   deletePortfolioItem,
 } from "../controllers/portfolioController.js";
 
@@ -25,6 +26,13 @@ router.get(
   protect,
   authorize("vendor"),
   getMyPortfolio
+);
+
+router.put(
+  "/:id",
+  protect,
+  authorize("vendor"),
+  updatePortfolioItem
 );
 
 router.delete(
