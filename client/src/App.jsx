@@ -10,6 +10,11 @@ import Register from "./pages/Register";
 import CustomerDashboard from "./pages/dashboard/CustomerDashboard";
 import VendorDashboard from "./pages/dashboard/VendorDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import AdminUsers from "./pages/dashboard/AdminUsers";
+import AdminVendors from "./pages/dashboard/AdminVendors";
+import AdminBookings from "./pages/dashboard/AdminBookings";
+import AdminAnalytics from "./pages/dashboard/AdminAnalytics";
+import AdminSettings from "./pages/dashboard/AdminSettings";
 import VendorBusinessProfile from "./pages/dashboard/VendorBusinessProfile";
 import VendorPortfolioManager from "./pages/dashboard/VendorPortfolioManager";
 
@@ -88,6 +93,51 @@ function App() {
         element={
           <ProtectedRoute roles={["admin"]}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard/users"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminUsers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard/vendors"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminVendors />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard/bookings"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminBookings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard/analytics"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminAnalytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard/settings"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminSettings />
           </ProtectedRoute>
         }
       />
