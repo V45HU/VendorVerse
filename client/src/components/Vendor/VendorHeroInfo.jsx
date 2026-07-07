@@ -1,6 +1,18 @@
-import { CheckCircle2, MapPin, Share2, Star } from "lucide-react";
+import { CheckCircle2, MapPin, Share2, Star, Check } from "lucide-react";
+import { useState } from "react";
 
 function VendorHeroInfo({ vendor }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       {/* Top Row */}
@@ -78,6 +90,7 @@ function VendorHeroInfo({ vendor }) {
         {/* Share */}
 
         <button
+          onClick={handleShare}
           className="
                     self-start
                     flex
@@ -92,8 +105,8 @@ function VendorHeroInfo({ vendor }) {
                     transition
                   "
         >
-          <Share2 size={18} />
-          Share
+          {copied ? <Check size={18} /> : <Share2 size={18} />}
+          {copied ? "Copied" : "Share"}
         </button>
       </div>
     </>

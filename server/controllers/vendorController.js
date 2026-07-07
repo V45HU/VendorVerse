@@ -159,25 +159,36 @@ export const getAllVendors = async (req, res) => {
 
 export const searchVendors = async (req, res) => {
   try {
-    const { city, category } = req.query;
+    const { city, category, query } = req.query;
 
-    let query = {};
+    const searchQuery = {};
 
     if (city) {
-      query.city = {
+      searchQuery.city = {
         $regex: city,
         $options: "i",
       };
     }
 
     if (category) {
-      query.category = {
+      searchQuery.category = {
         $regex: category,
         $options: "i",
       };
     }
 
-    const vendors = await Vendor.find(query);
+    if (query) {
+      searchQuery.$or = [
+        { businessName: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { city: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+      ];
+    }
+
+    const vendors = await Vendor.find(searchQuery)
+      .sort({ isFeatured: -1, rating: -1, createdAt: -1 })
+      .limit(24);
 
     res.status(200).json(vendors);
   } catch (error) {

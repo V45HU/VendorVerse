@@ -5,7 +5,7 @@ import ReviewCarousel from "./ReviewCarousel";
 import { useState } from "react";
 import WriteReviewModal from "./WriteReviewModal.jsx";
 
-function Reviews({ reviews, onCreateReview }) {
+function Reviews({ reviews, onCreateReview, isAuthenticated, onRequireAuth }) {
   const [showReviewModal, setShowReviewModal] = useState(false);
   return (
     <section className="bg-white rounded-3xl shadow-md border border-slate-100 p-8 mt-8">
@@ -24,7 +24,13 @@ function Reviews({ reviews, onCreateReview }) {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setShowReviewModal(true)}
+            onClick={() => {
+              if (isAuthenticated) {
+                setShowReviewModal(true);
+              } else {
+                onRequireAuth();
+              }
+            }}
             className="
       bg-emerald-600
       text-white
@@ -35,7 +41,7 @@ function Reviews({ reviews, onCreateReview }) {
       transition
     "
           >
-            Write Review
+            {isAuthenticated ? "Write Review" : "Login to Review"}
           </button>
 
           <button
@@ -74,6 +80,12 @@ function Reviews({ reviews, onCreateReview }) {
           </ReviewCarousel>
         </div>
       </div>
+      {!isAuthenticated && (
+        <p className="mt-4 text-sm text-slate-500">
+          Sign in to share your experience and help other customers.
+        </p>
+      )}
+
       <WriteReviewModal
         isOpen={showReviewModal}
         onClose={() => setShowReviewModal(false)}

@@ -8,6 +8,11 @@ import {
 } from "lucide-react";
 
 function BookingSidebar({ vendor, onBook }) {
+  const locationText = [vendor?.address, vendor?.city]
+    .filter(Boolean)
+    .join(", ");
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationText || vendor?.businessName || "vendor")}`;
+
   return (
     <aside className="sticky top-28">
       <div className="bg-white rounded-3xl shadow-lg border border-slate-100 p-7">
@@ -41,26 +46,24 @@ function BookingSidebar({ vendor, onBook }) {
 
         {/* Contact Buttons */}
 
-        <div className="grid grid-cols-2 gap-3 mt-4">
-          <button className="border rounded-xl py-3 font-medium flex justify-center items-center gap-2 hover:bg-slate-50">
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <a
+            href={`tel:${vendor.phone || ""}`}
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 py-3 font-medium text-slate-700 transition hover:bg-slate-50"
+          >
             <Phone size={18} />
-            <a href={`tel:${vendor.phone}`} className="...">
-              Call Now
-            </a>
-          </button>
+            Call Now
+          </a>
 
-          <button className="border rounded-xl py-3 font-medium flex justify-center items-center gap-2 hover:bg-slate-50">
+          <a
+            href={`https://wa.me/91${vendor.whatsapp || vendor.phone || ""}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 py-3 font-medium text-slate-700 transition hover:bg-slate-50"
+          >
             <MessageCircle size={18} />
-
-            <a
-              href={`https://wa.me/91${vendor.whatsapp || vendor.phone}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="..."
-            >
-              WhatsApp
-            </a>
-          </button>
+            WhatsApp
+          </a>
         </div>
 
         {/* Divider */}
@@ -73,13 +76,13 @@ function BookingSidebar({ vendor, onBook }) {
           <div className="flex gap-3">
             <MapPin size={18} className="mt-1 text-emerald-600" />
 
-            <span>Bhilai, Chhattisgarh</span>
+            <span>{locationText || "Location shared on request"}</span>
           </div>
 
           <div className="flex gap-3">
             <Mail size={18} className="mt-1 text-emerald-600" />
 
-            <span>pixelstudio@email.com</span>
+            <span>{vendor.email || "Email shared on request"}</span>
           </div>
 
           <div className="flex gap-3">
@@ -97,9 +100,14 @@ function BookingSidebar({ vendor, onBook }) {
 
         {/* Map Button */}
 
-        <button className="w-full mt-8 border rounded-xl py-3 hover:bg-slate-50 font-medium">
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-8 flex w-full items-center justify-center rounded-xl border border-slate-200 py-3 font-medium transition hover:bg-slate-50"
+        >
           View On Map
-        </button>
+        </a>
       </div>
     </aside>
   );

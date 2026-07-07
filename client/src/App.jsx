@@ -8,6 +8,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 import CustomerDashboard from "./pages/dashboard/CustomerDashboard";
+import CustomerBookings from "./pages/dashboard/CustomerBookings";
+import CustomerReviews from "./pages/dashboard/CustomerReviews";
+import CustomerProfile from "./pages/dashboard/CustomerProfile";
+import CustomerSettings from "./pages/dashboard/CustomerSettings";
 import VendorDashboard from "./pages/dashboard/VendorDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import AdminUsers from "./pages/dashboard/AdminUsers";
@@ -53,6 +57,42 @@ function App() {
         element={
           <ProtectedRoute roles={["customer"]}>
             <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customer-dashboard/bookings"
+        element={
+          <ProtectedRoute roles={["customer"]}>
+            <CustomerBookings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customer-dashboard/reviews"
+        element={
+          <ProtectedRoute roles={["customer"]}>
+            <CustomerReviews />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customer-dashboard/profile"
+        element={
+          <ProtectedRoute roles={["customer"]}>
+            <CustomerProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customer-dashboard/settings"
+        element={
+          <ProtectedRoute roles={["customer"]}>
+            <CustomerSettings />
           </ProtectedRoute>
         }
       />

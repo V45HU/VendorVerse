@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   getVendorById,
@@ -20,9 +20,12 @@ import BookingModal from "../components/Dashboard/Bookings/BookingModal.jsx";
 
 import Reviews from "../components/Vendor/Reviews.jsx";
 import { getVendorReviews, createReview } from "../services/reviewServices.js";
+import useAuth from "../hooks/useAuth.js";
 
 function VendorDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
 
   const [vendor, setVendor] = useState(null);
 
@@ -40,6 +43,25 @@ function VendorDetails() {
       setReviews(reviewData);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleBookNow = () => {
+    if (authLoading) return;
+
+    if (!user) {
+      navigate(`/login?redirect=/vendors/${id}`);
+      return;
+    }
+
+    setBookingOpen(true);
+  };
+
+  const handleRequireAuth = () => {
+    if (authLoading) return;
+
+    if (!user) {
+      navigate(`/login?redirect=/vendors/${id}`);
     }
   };
 
@@ -98,19 +120,13 @@ function VendorDetails() {
     );
   }
 
-  console.log("Vendor:", vendor);
-
-  console.log("Portfolio:", portfolio);
-
-  console.log("Reviews:", reviews);
-
   return (
     <>
       <Navbar />
 
       <VendorBreadcrumb />
 
-      <VendorCover />
+      <VendorCover vendor={vendor} />
 
       <VendorInfoCard vendor={vendor} />
 
@@ -123,10 +139,15 @@ function VendorDetails() {
 
             <VendorServices vendor={vendor} />
 
-            <Reviews reviews={reviews} onCreateReview={handleCreateReview} />
+            <Reviews
+              reviews={reviews}
+              onCreateReview={handleCreateReview}
+              isAuthenticated={!!user}
+              onRequireAuth={handleRequireAuth}
+            />
           </div>
 
-          <BookingSidebar vendor={vendor} onBook={() => setBookingOpen(true)} />
+          <BookingSidebar vendor={vendor} onBook={handleBookNow} />
         </div>
       </section>
 

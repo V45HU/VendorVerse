@@ -22,12 +22,13 @@ function WriteReviewModal({ isOpen, onClose, onSubmit }) {
         rating,
       });
 
-      // Reset form
       setTitle("");
       setComment("");
-      setRating();
+      setRating(5);
 
       onClose();
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
