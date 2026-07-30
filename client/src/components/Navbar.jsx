@@ -46,21 +46,21 @@ function Navbar() {
             </NavLink>
 
             <a
-              href="#categories"
+              href="/#categories"
               className="text-gray-700 hover:text-emerald-600 transition"
             >
               Categories
             </a>
 
             <a
-              href="#how-it-works"
+              href="/#how-it-works"
               className="text-gray-700 hover:text-emerald-600 transition"
             >
               How It Works
             </a>
 
             <a
-              href="#footer"
+              href="/#about"
               className="text-gray-700 hover:text-emerald-600 transition"
             >
               About
