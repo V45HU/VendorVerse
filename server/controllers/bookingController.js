@@ -1,5 +1,6 @@
 import Booking from "../models/Booking.js";
 import Vendor from "../models/Vendor.js";
+import { createNotification } from "../services/notificationService.js";
 
 //
 // Create Booking
@@ -37,6 +38,17 @@ export const createBooking = async (req, res) => {
       guestCount,
       budget,
       requirements,
+    });
+
+    await createNotification({
+      recipient: vendor.userId,
+      sender: req.user._id,
+      type: "booking",
+      title: "New Booking Request",
+      message: `You received a new ${eventType} booking request.`,
+      link: "/vendor-dashboard/bookings",
+      referenceId: booking._id,
+      referenceModel: "Booking",
     });
 
     res.status(201).json({
@@ -165,6 +177,17 @@ export const updateBookingStatus = async (req, res) => {
 
     await booking.save();
 
+    await createNotification({
+      recipient: booking.customerId,
+      sender: req.user._id,
+      type: "booking",
+      title: "Booking Updated",
+      message: `Your booking has been ${booking.status}.`,
+      link: "/customer-dashboard/bookings",
+      referenceId: booking._id,
+      referenceModel: "Booking",
+    });
+
     res.status(200).json({
       success: true,
       booking,
@@ -236,6 +259,17 @@ export const sendQuotation = async (req, res) => {
 
     await booking.save();
 
+    await createNotification({
+      recipient: booking.customerId,
+      sender: req.user._id,
+      type: "quotation",
+      title: "Quotation Received",
+      message: "A quotation has been sent for your booking.",
+      link: "/customer-dashboard/bookings",
+      referenceId: booking._id,
+      referenceModel: "Booking",
+    });
+
     res.status(200).json({
       success: true,
       booking,
@@ -273,6 +307,17 @@ export const scheduleMeeting = async (req, res) => {
     booking.meetingDate = req.body.meetingDate;
 
     await booking.save();
+
+    await createNotification({
+      recipient: booking.customerId,
+      sender: req.user._id,
+      type: "meeting",
+      title: "Meeting Scheduled",
+      message: "Your meeting has been scheduled.",
+      link: "/customer-dashboard/bookings",
+      referenceId: booking._id,
+      referenceModel: "Booking",
+    });
 
     res.status(200).json({
       success: true,

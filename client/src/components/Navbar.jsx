@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import useAuth from "../hooks/useAuth";
+import NotificationBell from "./Notification/NotificationBell";
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -95,10 +96,13 @@ function Navbar() {
                 </Link>
               </>
             ) : (
-              <div className="relative">
-                <button
-                  onClick={() => setMenuOpen(!menuOpen)}
-                  className="
+              <>
+                <NotificationBell />
+
+                <div className="relative">
+                  <button
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    className="
           flex
           items-center
           gap-3
@@ -110,9 +114,9 @@ function Navbar() {
           hover:border-emerald-500
           transition
         "
-                >
-                  <div
-                    className="
+                  >
+                    <div
+                      className="
             w-10
             h-10
             rounded-full
@@ -123,24 +127,24 @@ function Navbar() {
             text-white
             font-bold
           "
-                  >
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
+                    >
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
 
-                  <div className="text-left">
-                    <p className="font-semibold">{user.name}</p>
+                    <div className="text-left">
+                      <p className="font-semibold">{user.name}</p>
 
-                    <p className="text-xs text-gray-500 capitalize">
-                      {user.role}
-                    </p>
-                  </div>
+                      <p className="text-xs text-gray-500 capitalize">
+                        {user.role}
+                      </p>
+                    </div>
 
-                  <ChevronDown size={18} />
-                </button>
+                    <ChevronDown size={18} />
+                  </button>
 
-                {menuOpen && (
-                  <div
-                    className="
+                  {menuOpen && (
+                    <div
+                      className="
             absolute
             right-0
             mt-3
@@ -153,29 +157,29 @@ function Navbar() {
             overflow-hidden
             z-50
           "
-                  >
-                    <Link
-                      to={
-                        user.role === "vendor"
-                          ? "/vendor-dashboard"
-                          : user.role === "admin"
-                            ? "/admin-dashboard"
-                            : "/customer-dashboard"
-                      }
-                      className="
+                    >
+                      <Link
+                        to={
+                          user.role === "vendor"
+                            ? "/vendor-dashboard"
+                            : user.role === "admin"
+                              ? "/admin-dashboard"
+                              : "/customer-dashboard"
+                        }
+                        className="
               block
               px-5
               py-4
               hover:bg-slate-100
             "
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
 
-                    <button
-                      onClick={logout}
-                      className="
+                      <button
+                        onClick={logout}
+                        className="
               w-full
               text-left
               px-5
@@ -183,12 +187,13 @@ function Navbar() {
               text-red-600
               hover:bg-red-50
             "
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>

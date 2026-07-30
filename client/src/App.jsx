@@ -50,6 +50,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/vendor-dashboard/reviews"
+        element={
+          <ProtectedRoute roles={["vendor"]}>
+            <VendorDashboard />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Customer */}
 
       <Route

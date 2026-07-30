@@ -1,6 +1,7 @@
 import Review from "../models/Review.js";
 import Vendor from "../models/Vendor.js";
 import updateVendorRating from "../utils/updateVendorRating.js";
+import { createNotification } from "../services/notificationService.js";
 
 // ---------------------------------------------------
 // Create Review
@@ -40,6 +41,17 @@ export const createReview = async (req, res) => {
       comment,
 
       rating,
+    });
+
+    await createNotification({
+      recipient: vendor.userId,
+      sender: req.user._id,
+      type: "review",
+      title: "New Review",
+      message: "You received a new customer review.",
+      link: "/vendor-dashboard/reviews",
+      referenceId: review._id,
+      referenceModel: "Review",
     });
 
     await updateVendorRating(vendorId);

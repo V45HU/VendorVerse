@@ -1,30 +1,19 @@
-import Notification from "../models/Notification.js";
+import API from "../api/axios";
 
-export const createNotification = async ({
-  recipient,
-  sender = null,
-  type,
-  title,
-  message,
-  link = "",
-  referenceId = null,
-  referenceModel = "",
-}) => {
-  return await Notification.create({
-    recipient,
+export const getNotifications = async () => {
+  const response = await API.get("/notifications");
 
-    sender,
+  return response.data;
+};
 
-    type,
+export const markAsRead = async (notificationId) => {
+  const response = await API.put(`/notifications/${notificationId}/read`);
 
-    title,
+  return response.data;
+};
 
-    message,
+export const markAllAsRead = async () => {
+  const response = await API.put("/notifications/read-all");
 
-    link,
-
-    referenceId,
-
-    referenceModel,
-  });
+  return response.data;
 };
